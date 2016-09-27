@@ -44,7 +44,7 @@ this becomes unwieldy to manage. =burdened-acrobat= makes it simple again.
 | A collection of load balancers | The tags on those load balancers      |
 
 
-** Load Balanceers
+** Load Balancers
 
 ~LoadBalancers#tagged~ returns load balancers.
 
