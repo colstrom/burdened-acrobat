@@ -1,0 +1,93 @@
+#+TITLE: Burdened Acrobat
+#+LATEX: \pagebreak
+
+* Overview
+
+=burdened-acrobat= helps identity specific load balancers (or groups of load
+balancers), when you have an unreasonable number of them. It does this by
+treating the problem as one of set membership.
+
+* Why does this exist?
+
+Some orchestration systems create large numbers of load balancers. Eventually,
+this becomes unwieldy to manage. =burdened-acrobat= makes it simple again.
+
+* Installation
+
+#+BEGIN_SRC shell
+  gem install burdened-acrobat
+#+END_SRC
+
+* Usage
+
+#+BEGIN_SRC ruby
+  require 'burdened-acrobat'
+
+  load_balancers = BurdenedAcrobat::LoadBalancers.new
+
+  load_balancers.search do
+    tagged('KubernetesCluster') & with('subnet-abv123') & tagged('kubernetes.io/service-name', 'app/identity-service')
+  end
+#+END_SRC
+
+=burdened-acrobat= operates on two main sets of information: Load Balancers, and Tags.
+
+** Tags
+
+~LoadBalancers#tags~ returns tags.
+
+| Given these Arguments          | Expect to get a collection of...      |
+|--------------------------------+---------------------------------------|
+| None                           | All tags                              |
+| A tag name                     | All tags matching that name           |
+| A tag name, and a value        | All tags matching that name and value |
+| A collection of load balancers | The tags on those load balancers      |
+
+
+** Load Balanceers
+
+~LoadBalancers#tagged~ returns load balancers.
+
+| Given these arguments   | Expect to get a collection of...                         |
+|-------------------------+----------------------------------------------------------|
+| None                    | All load balancers with tags                             |
+| A tag name              | All load balancers with the given tag                    |
+| A tag name, and a value | All load balancers where the given tag matches the value |
+| A collection of tags    | All load balancers matching those tags                   |
+
+** Everything!
+
+~LoadBalancers#all~ returns all load balancers.
+
+** Names
+
+~LoadBalancers#names~ accepts tags or load balancers, and returns names.
+
+** Using Names
+
+~LoadBalancers#named~ accepts names, and returns load balancers.
+
+** Complex Searches
+
+Everything returned is in the form of =Sets=. This allows building complex
+filters using ~#intersection~, ~#union~, ~#difference~, and so on.
+
+** AWS-specific extras
+
+When using Amazon ELBs, =burdened-acrobat= provides additional filters.
+
+-LoadBalancers#with~ returns load balancers.
+
+| Given these arguments | Expect to get a collection of                |
+|-----------------------+----------------------------------------------|
+| A VPC                 | All load balancers in that VPC               |
+| A security group      | All load balancers using that security group |
+| A subnet              | ALl load balancers using that subnet         |
+
+* License
+
+  ~burdened-acrobat~ is available under the [[https://tldrlegal.com/license/mit-license][MIT License]]. See ~LICENSE.txt~ for the full text.
+
+* Contributors
+
+  - [[https://colstrom.github.io/][Chris Olstrom]] | [[mailto:chris@olstrom.com][e-mail]] | [[https://twitter.com/ChrisOlstrom][Twitter]]
