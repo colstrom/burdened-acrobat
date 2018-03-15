@@ -10,6 +10,9 @@ Gem::Specification.new do |gem|
   gem.authors     = ['Chris Olstrom']
   gem.email       = 'chris@olstrom.com'
 
+  gem.cert_chain    = ['trust/certificates/colstrom.pem']
+  gem.signing_key   = File.expand_path ENV.fetch 'GEM_SIGNING_KEY'
+
   gem.files         = `git ls-files`.split("\n")
   gem.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   gem.executables   = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
